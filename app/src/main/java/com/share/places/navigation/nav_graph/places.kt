@@ -19,7 +19,7 @@ fun NavGraphBuilder.places(navController: NavController) {
             PlacesListScreen(
                 addPlaceClickListener = {
                     navController.navigate(
-                        route = Screen.CreatePlaceScreen.createRoute(null, null, null)
+                        route = Screen.CreatePlaceScreen.route
                     )
                 }
             )

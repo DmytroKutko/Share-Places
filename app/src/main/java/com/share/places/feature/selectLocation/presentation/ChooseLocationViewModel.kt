@@ -8,7 +8,6 @@ import com.share.places.feature.selectLocation.domain.CreatePlaceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
@@ -18,9 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ChooseLocationViewModel @Inject constructor(
     private val useCases: CreatePlaceUseCases,
-//    private val addressListener: MutableSharedFlow<PositionData?>
+    private val addressListener: MutableSharedFlow<PositionData?>
 ) : ViewModel() {
-    private val _position = MutableStateFlow(PositionData(null, null))
+    private val _position = MutableStateFlow(PositionData("", LatLng(0.0, 0.0)))
     val position = _position.asStateFlow()
 
     fun updatePosition(latitude: Double, longitude: Double) = viewModelScope.launch {
@@ -42,9 +41,9 @@ class ChooseLocationViewModel @Inject constructor(
             }
     }
 
-//    fun setAddress() = viewModelScope.launch {
-//        addressListener.emit(_position.value)
-//    }
+    fun setAddress(address: String, coordinates: LatLng) = viewModelScope.launch {
+        addressListener.emit(PositionData(address, coordinates))
+    }
 
     fun cameraIsMoving() = viewModelScope.launch {
         _position.update {

@@ -12,10 +12,7 @@ sealed class Screen(val route: String) {
 
     data object PlacesScreen : Screen("places_screen")
 
-    data object CreatePlaceScreen : Screen("create_place_screen/{address}/{latitude}/{longitude}") {
-        fun createRoute(address: String?, latitude: String?, longitude: String?) =
-            "create_place_screen/${address ?: "Select address"}/$latitude/$longitude"
-    }
+    data object CreatePlaceScreen : Screen("create_place_screen")
 
     data object SelectPlaceScreen : Screen("select_place_screen/{latitude}/{longitude}"){
         fun createRoute(latitude: String?, longitude: String?) =

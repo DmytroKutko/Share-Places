@@ -5,8 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Singleton
 
 @Module
@@ -15,5 +14,5 @@ object ListenersModule {
 
     @Provides
     @Singleton
-    fun setAddressListener(): SharedFlow<PositionData?> = MutableStateFlow(null)
+    fun setAddressListener(): MutableSharedFlow<PositionData> = MutableSharedFlow()
 }

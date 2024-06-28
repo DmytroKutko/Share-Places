@@ -42,8 +42,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.share.places.feature.createPlace.data.CreatePlaceData
-import com.share.places.feature.createPlace.presentation.CreatePlaceViewModel
 import com.share.places.feature.selectLocation.data.PositionData
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -52,7 +50,6 @@ import com.share.places.feature.selectLocation.data.PositionData
 fun ChooseLocationScreen(
     navController: NavController,
     coordinates: LatLng,
-    onSelectAddress: (String, LatLng?) -> Unit,
     viewModel: ChooseLocationViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
@@ -137,9 +134,8 @@ fun ChooseLocationScreen(
                     .widthIn(min = 80.dp, max = 300.dp),
                 containerColor = Color.White,
                 onClick = {
-                    locationData.address?.let { address ->
-                        onSelectAddress(address, locationData.coordinates)
-                    }
+                    viewModel.setAddress(locationData.address, locationData.coordinates)
+                    navController.navigateUp()
                 }
             ) {
                 Text(

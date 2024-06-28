@@ -17,18 +17,7 @@ fun NavGraphBuilder.selectPlace(navController: NavController) {
 
         ChooseLocationScreen(
             navController,
-            coordinates = LatLng(latitude, longitude),
-            onSelectAddress = { address, latLng ->
-                navController.navigate(
-                    route = Screen.CreatePlaceScreen.createRoute(
-                        address,
-                        latLng?.latitude.toString(),
-                        latLng?.longitude.toString()
-                    )
-                ) {
-                    popUpTo(Screen.PlacesScreen.route) { inclusive = false }
-                }
-            }
+            coordinates = LatLng(latitude, longitude)
         )
     }
 }
