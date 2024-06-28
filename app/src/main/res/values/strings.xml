@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Share Places</string>
     <string name="google_maps_key">AIzaSyAMfrttP3Zt_vJXeE75ok3g_7DplQV7POU</string>
+    <string name="google_maps_geo_key">AIzaSyD40jrzWXs4Ffca00isJRLswPBCu9hsPOw</string>
 </resources>

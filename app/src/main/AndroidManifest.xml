@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="net.dottech.map.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="net.dottech.map.permission.MAPS_RECEIVE" />
 
     <application
         android:name=".MainApplication"

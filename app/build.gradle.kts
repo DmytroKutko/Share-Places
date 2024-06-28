@@ -103,11 +103,16 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Retrofit
+    implementation(libs.retrofit)
+
+
     // Coil
     implementation(libs.coil.compose)
 
     // Moshi
     implementation(libs.moshi.kotlin)
+    implementation(libs.converter.moshi)
 
     // Lottie
     implementation(libs.lottie.compose)

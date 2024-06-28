@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -63,6 +64,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.maps.model.LatLng
 import com.share.places.feature.createPlace.data.CreatePlaceData
 import java.util.jar.Manifest
 
@@ -70,11 +72,16 @@ import java.util.jar.Manifest
 @Composable
 fun CreatePlaceScreen(
     navController: NavController,
-    selectLocationClicked: () -> Unit,
+    address: String,
+    coordinates: LatLng,
+    selectLocationClicked: (LatLng?) -> Unit,
     viewModel: CreatePlaceViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
-    val locationData: CreatePlaceData by viewModel.locationData.collectAsStateWithLifecycle()
+    val locationData by viewModel.locationData.collectAsStateWithLifecycle()
+
+    viewModel.setAddress(address, coordinates)
+
     var title by remember { mutableStateOf(TextFieldValue()) }
     var description by remember { mutableStateOf(TextFieldValue()) }
 
@@ -141,7 +148,9 @@ fun CreatePlaceScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        selectLocationClicked()
+                        selectLocationClicked(
+                            viewModel.locationData.value.coordinates
+                        )
                     },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
