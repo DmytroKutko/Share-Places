@@ -95,7 +95,11 @@ fun CreatePlaceScreen(
         sheetPeekHeight = 0.dp,
         sheetContent = {
             ImagePickerBottomSheetContent(
-                cameraClickListener = cameraClickListener
+                emptyList(),
+                cameraClickListener = cameraClickListener,
+                imageClickListener = {
+
+                }
             )
         }
     ) { paddingValues ->

@@ -1,7 +1,10 @@
 package com.share.places.feature.createPlace.presentation.components
 
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,6 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -21,62 +28,68 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun ImagePickerBottomSheetContent(
-    cameraClickListener: () -> Unit
+    bitmaps: List<Bitmap>,
+    cameraClickListener: () -> Unit,
+    imageClickListener: (Bitmap) -> Unit,
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
         modifier = Modifier
             .fillMaxWidth()
-            .height(500.dp)
-            .padding(16.dp),
-        contentPadding = PaddingValues(8.dp)
+            .height(500.dp),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalItemSpacing = 16.dp,
     ) {
-        items(2) { index ->
-            when (index) {
-                0 -> {
-                    // Camera item
-                    Box(
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colorScheme.primary)
-                            .clickable {
-                                cameraClickListener()
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.CameraAlt,
-                            contentDescription = "Camera",
-                            tint = Color.White
-                        )
-                    }
-                }
+        // Camera item
+        item {
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable {
+                        cameraClickListener()
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                CameraGridComponent()
 
-                1 -> {
-                    // Another item (e.g., gallery)
-                    Box(
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(MaterialTheme.colorScheme.primary)
-                            .clickable {
-                                // Handle gallery click
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.PhotoLibrary,
-                            contentDescription = "Gallery",
-                            tint = Color.White
-                        )
-                    }
-                }
+                Icon(
+                    imageVector = Icons.Default.CameraAlt,
+                    contentDescription = "Camera",
+                    tint = Color.White
+                )
+            }
+        }
+
+        items(bitmaps){ bitmap ->
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(MaterialTheme.colorScheme.primary)
+                    .clickable {
+                        imageClickListener(bitmap)
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = bitmap,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp)),
+                    contentScale = ContentScale.FillHeight
+                )
             }
         }
     }
