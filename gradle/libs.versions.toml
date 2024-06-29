@@ -1,6 +1,6 @@
 [versions]
 accompanistPermissions = "0.31.0-alpha"
-agp = "8.5.0"
+agp = "8.4.2"
 coilCompose = "2.5.0"
 hiltAndroid = "2.50"
 hiltNavigationCompose = "1.2.0"

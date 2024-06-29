@@ -1,5 +1,5 @@
 package com.share.places.feature.selectLocation.domain
 
-data class CreatePlaceUseCases(
+data class ChooseLocationUseCases(
     val getAddress: GetAddress
 )

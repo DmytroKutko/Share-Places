@@ -3,10 +3,9 @@ package com.share.places.feature.createPlace.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
+import com.share.places.feature.core.delegates.AddressDelegate
 import com.share.places.feature.createPlace.data.CreatePlaceData
-import com.share.places.feature.selectLocation.data.PositionData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreatePlaceViewModel @Inject constructor(
-    private val addressListener: MutableSharedFlow<PositionData>,
+    private val addressDelegate: AddressDelegate
 ) : ViewModel() {
 
     private val _locationData =
@@ -24,7 +23,7 @@ class CreatePlaceViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            addressListener.collect { data ->
+            addressDelegate.dataFlow.collect { data ->
                 _locationData.update {
                     it.copy(
                         locationAddress = data.address,

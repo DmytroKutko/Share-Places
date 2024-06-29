@@ -8,7 +8,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.share.places.R
 import com.share.places.api.geo_api.GeocodingApi
-import com.share.places.feature.selectLocation.domain.CreatePlaceUseCases
+import com.share.places.feature.selectLocation.domain.ChooseLocationUseCases
 import com.share.places.feature.selectLocation.domain.GetAddress
 import com.share.places.utils.Constants.GEO_BASE_URL
 import com.squareup.moshi.Moshi
@@ -50,7 +50,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun createPlaceUseCases(api: GeocodingApi, @ApplicationContext context: Context): CreatePlaceUseCases = CreatePlaceUseCases(
+    fun createPlaceUseCases(api: GeocodingApi, @ApplicationContext context: Context): ChooseLocationUseCases = ChooseLocationUseCases(
         GetAddress(api, context.getString(R.string.google_maps_geo_key)),
     )
 }

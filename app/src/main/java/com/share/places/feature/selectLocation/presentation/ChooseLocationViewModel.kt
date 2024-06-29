@@ -3,10 +3,10 @@ package com.share.places.feature.selectLocation.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
+import com.share.places.feature.core.delegates.AddressDelegate
 import com.share.places.feature.selectLocation.data.PositionData
-import com.share.places.feature.selectLocation.domain.CreatePlaceUseCases
+import com.share.places.feature.selectLocation.domain.ChooseLocationUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChooseLocationViewModel @Inject constructor(
-    private val useCases: CreatePlaceUseCases,
-    private val addressListener: MutableSharedFlow<PositionData?>
+    private val useCases: ChooseLocationUseCases,
+    private val addressDelegate: AddressDelegate
 ) : ViewModel() {
     private val _position = MutableStateFlow(PositionData("", LatLng(0.0, 0.0)))
     val position = _position.asStateFlow()
@@ -42,7 +42,7 @@ class ChooseLocationViewModel @Inject constructor(
     }
 
     fun setAddress(address: String, coordinates: LatLng) = viewModelScope.launch {
-        addressListener.emit(PositionData(address, coordinates))
+        addressDelegate.emitData(PositionData(address, coordinates))
     }
 
     fun cameraIsMoving() = viewModelScope.launch {
