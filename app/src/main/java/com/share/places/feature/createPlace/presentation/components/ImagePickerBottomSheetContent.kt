@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -24,11 +25,14 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ImagePickerBottomSheetContent() {
+fun ImagePickerBottomSheetContent(
+    cameraClickListener: () -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxWidth()
+            .height(500.dp)
             .padding(16.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
@@ -42,7 +46,7 @@ fun ImagePickerBottomSheetContent() {
                             .clip(RoundedCornerShape(10.dp))
                             .background(MaterialTheme.colorScheme.primary)
                             .clickable {
-                                // Handle camera click
+                                cameraClickListener()
                             },
                         contentAlignment = Alignment.Center
                     ) {

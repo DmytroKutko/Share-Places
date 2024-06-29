@@ -19,10 +19,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.share.places.navigation.nav_graph.camera
 import com.share.places.navigation.nav_graph.createPlace
 import com.share.places.navigation.nav_graph.map
 import com.share.places.navigation.nav_graph.places
-import com.share.places.navigation.nav_graph.selectPlace
+import com.share.places.navigation.nav_graph.mapLocation
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -52,7 +53,8 @@ fun AppNavigation() {
             map(navController)
             places(navController)
             createPlace(navController)
-            selectPlace(navController)
+            mapLocation(navController)
+            camera(navController)
         }
     }
 }

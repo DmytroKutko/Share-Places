@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.share.places.feature.core.permissions.CameraPermissionManager
 import com.share.places.feature.core.ui.theme.SharePlacesTheme
 import com.share.places.navigation.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,11 +23,17 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
+    lateinit var cameraPermissionManager: CameraPermissionManager
+
+    @Inject
     lateinit var analytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if (!cameraPermissionManager.hasPermissions()) {
+            cameraPermissionManager.requestCameraPermissions(this)
+        }
 
         setContent {
             SharePlacesTheme {

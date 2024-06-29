@@ -14,9 +14,11 @@ sealed class Screen(val route: String) {
 
     data object CreatePlaceScreen : Screen("create_place_screen")
 
-    data object SelectPlaceScreen : Screen("select_place_screen/{latitude}/{longitude}"){
+    data object CameraScreen : Screen("camera_screen")
+
+    data object MapLocationScreen : Screen("map_location_screen/{latitude}/{longitude}"){
         fun createRoute(latitude: String?, longitude: String?) =
-            "select_place_screen/$latitude/$longitude"
+            "map_location_screen/$latitude/$longitude"
     }
 }
 

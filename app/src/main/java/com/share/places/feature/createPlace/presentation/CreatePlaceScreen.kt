@@ -28,10 +28,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,16 +52,21 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.android.gms.maps.model.LatLng
 import com.share.places.feature.createPlace.presentation.components.ImagePickerBottomSheetContent
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreatePlaceScreen(
     navController: NavController,
-    selectLocationClicked: (LatLng?) -> Unit,
+    locationClickListener: (LatLng?) -> Unit,
+    cameraClickListener: () -> Unit,
     viewModel: CreatePlaceViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
     val locationData by viewModel.locationData.collectAsStateWithLifecycle()
+
+    val scaffoldState = rememberBottomSheetScaffoldState()
+    val scope = rememberCoroutineScope()
 
     var title by remember { mutableStateOf(TextFieldValue()) }
     var description by remember { mutableStateOf(TextFieldValue()) }
@@ -69,6 +76,7 @@ fun CreatePlaceScreen(
 
     BottomSheetScaffold(
         modifier = modifier,
+        scaffoldState = scaffoldState,
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
@@ -86,7 +94,9 @@ fun CreatePlaceScreen(
         },
         sheetPeekHeight = 0.dp,
         sheetContent = {
-            ImagePickerBottomSheetContent()
+            ImagePickerBottomSheetContent(
+                cameraClickListener = cameraClickListener
+            )
         }
     ) { paddingValues ->
         Column(
@@ -94,6 +104,7 @@ fun CreatePlaceScreen(
                 .fillMaxSize()
                 .padding(
                     top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
                     start = 12.dp,
                     end = 12.dp
                 ),
@@ -108,7 +119,12 @@ fun CreatePlaceScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(96.dp)
-                        .clip(RoundedCornerShape(10.dp)),
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable {
+                            scope.launch {
+                                scaffoldState.bottomSheetState.expand()
+                            }
+                        },
                     contentScale = ContentScale.FillHeight
                 )
             } else {
@@ -119,6 +135,11 @@ fun CreatePlaceScreen(
                         .fillMaxWidth()
                         .height(96.dp)
                         .clip(RoundedCornerShape(10.dp))
+                        .clickable {
+                            scope.launch {
+                                scaffoldState.bottomSheetState.expand()
+                            }
+                        }
                 )
             }
 
@@ -126,7 +147,7 @@ fun CreatePlaceScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        selectLocationClicked(
+                        locationClickListener(
                             viewModel.locationData.value.coordinates
                         )
                     },

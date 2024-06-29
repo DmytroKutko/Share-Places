@@ -7,9 +7,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.share.places.feature.selectLocation.presentation.ChooseLocationScreen
 import com.share.places.navigation.Screen
 
-fun NavGraphBuilder.selectPlace(navController: NavController) {
+fun NavGraphBuilder.mapLocation(navController: NavController) {
     composable(
-        route = Screen.SelectPlaceScreen.route
+        route = Screen.MapLocationScreen.route
     ) { backStackEntry ->
 
         val latitude = backStackEntry.arguments?.getString("latitude")?.toDoubleOrNull() ?: 37.7749
