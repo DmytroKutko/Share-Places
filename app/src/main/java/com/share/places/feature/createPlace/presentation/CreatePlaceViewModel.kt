@@ -1,5 +1,6 @@
 package com.share.places.feature.createPlace.presentation
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
@@ -52,6 +53,14 @@ class CreatePlaceViewModel @Inject constructor(
             it.copy(
                 locationAddress = address,
                 coordinates = coordinates
+            )
+        }
+    }
+
+    fun setImageFromGallery(bitmap: Bitmap) {
+        _locationData.update {
+            it.copy(
+                selectedImage = bitmap
             )
         }
     }

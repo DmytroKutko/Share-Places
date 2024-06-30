@@ -51,6 +51,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -115,15 +116,14 @@ fun CreatePlaceScreen(
         sheetContent = {
             ImagePickerBottomSheetContent(
                 isExpanded = scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded,
-                emptyList(),
                 cameraClickListener = {
                     cameraClickListener()
                     scope.launch {
                         scaffoldState.bottomSheetState.partialExpand()
                     }
                 },
-                imageClickListener = {
-
+                imageClickListener = { bitmap ->
+                    viewModel.setImageFromGallery(bitmap)
                 }
             )
         },
@@ -185,6 +185,7 @@ fun CreatePlaceScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(vertical = 12.dp)
                     .clickable {
                         locationClickListener(
                             viewModel.locationData.value.coordinates
@@ -196,7 +197,8 @@ fun CreatePlaceScreen(
                 Icon(imageVector = Icons.Default.AddLocation, contentDescription = null)
 
                 Text(
-                    text = locationData.locationAddress
+                    text = locationData.locationAddress,
+                    fontSize = 24.sp
                 )
             }
 
