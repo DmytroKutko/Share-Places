@@ -3,8 +3,11 @@ package com.share.places.feature.createPlace.presentation.components
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -12,24 +15,27 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
-fun CameraGridComponent(modifier: Modifier = Modifier) {
-//    val context = LocalContext.current
-//    val controller: LifecycleCameraController = remember {
-//        LifecycleCameraController(context).apply {
-//            setEnabledUseCases(
-//                CameraController.IMAGE_CAPTURE
-//            )
-//        }
-//    }
-//    val lifecycleOwner = LocalLifecycleOwner.current
+fun CameraGridComponent(
+    isExpanded: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    AndroidView(
-        factory = {
-            PreviewView(it).apply {
-//                this.controller = controller
-//                controller.bindToLifecycle(lifecycleOwner)
-            }
-        },
-        modifier = modifier
-    )
+    if (isExpanded) {
+        AndroidView(
+            factory = {
+                PreviewView(it).apply {
+                    this.controller = LifecycleCameraController(context).apply {
+                        bindToLifecycle(lifecycleOwner)
+                        setEnabledUseCases(
+                            CameraController.IMAGE_CAPTURE
+                        )
+                    }
+                }
+            },
+            modifier = modifier
+                .fillMaxSize()
+        )
+    }
 }

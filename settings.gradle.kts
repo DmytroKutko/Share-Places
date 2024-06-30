@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Share Places"
 include(":app")
- 
+include(":network")

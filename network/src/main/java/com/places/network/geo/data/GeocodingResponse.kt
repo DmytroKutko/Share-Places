@@ -1,4 +1,4 @@
-package com.share.places.api.geo_api.data
+package com.places.network.geo.data
 
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Json

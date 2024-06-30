@@ -4,19 +4,19 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.annotation.StringRes
 import com.google.android.gms.maps.model.LatLng
-import com.share.places.api.geo_api.GeocodingApi
+import com.places.network.geo.GeoRepository
+import com.share.places.BuildConfig
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @SuppressLint("SupportAnnotationUsage")
 class GetAddress @Inject constructor(
-    private val api: GeocodingApi,
-    @StringRes private val apiKey: String
+    private val repository: GeoRepository
 ) {
     private var latestAddress = ""
     suspend operator fun invoke(coordinated: LatLng) = flow {
         try {
-            val response = api.getAddress("${coordinated.latitude},${coordinated.longitude}", apiKey)
+            val response = repository.getAddress("${coordinated.latitude},${coordinated.longitude}", BuildConfig.GEO_KEY)
             Log.d("geo_debug", "invoke: $response")
             if (response.status == "OK" && response.results.isNotEmpty()) {
                 val result = response.results[0]

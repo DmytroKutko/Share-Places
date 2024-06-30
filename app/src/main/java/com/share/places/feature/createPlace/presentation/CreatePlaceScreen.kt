@@ -1,7 +1,9 @@
 package com.share.places.feature.createPlace.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +31,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
@@ -74,13 +79,27 @@ fun CreatePlaceScreen(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    BackHandler(enabled = scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
+        scope.launch {
+            scaffoldState.bottomSheetState.partialExpand()
+        }
+    }
+
     BottomSheetScaffold(
         modifier = modifier,
         scaffoldState = scaffoldState,
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
+                            scope.launch {
+                                scaffoldState.bottomSheetState.partialExpand()
+                            }
+                        } else {
+                            navController.popBackStack()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = null
@@ -95,14 +114,21 @@ fun CreatePlaceScreen(
         sheetPeekHeight = 0.dp,
         sheetContent = {
             ImagePickerBottomSheetContent(
+                isExpanded = scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded,
                 emptyList(),
-                cameraClickListener = cameraClickListener,
+                cameraClickListener = {
+                    cameraClickListener()
+                    scope.launch {
+                        scaffoldState.bottomSheetState.partialExpand()
+                    }
+                },
                 imageClickListener = {
 
                 }
             )
-        }
-    ) { paddingValues ->
+        },
+
+        ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,6 +137,15 @@ fun CreatePlaceScreen(
                     bottom = paddingValues.calculateBottomPadding(),
                     start = 12.dp,
                     end = 12.dp
+                )
+                .clickable(
+                    onClick = {
+                        scope.launch {
+                            scaffoldState.bottomSheetState.partialExpand()
+                        }
+                    },
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -121,8 +156,8 @@ fun CreatePlaceScreen(
                     model = locationData.selectedImage,
                     contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(96.dp)
+                        .widthIn(96.dp, 200.dp)
+                        .heightIn(96.dp, 200.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .clickable {
                             scope.launch {
@@ -136,8 +171,8 @@ fun CreatePlaceScreen(
                     imageVector = Icons.Default.CameraAlt,
                     contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(96.dp)
+                        .widthIn(96.dp, 200.dp)
+                        .heightIn(96.dp, 200.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .clickable {
                             scope.launch {

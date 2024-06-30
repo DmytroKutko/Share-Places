@@ -1,6 +1,6 @@
-package com.share.places.api.geo_api
+package com.places.network.geo
 
-import com.share.places.api.geo_api.data.GeocodingResponse
+import com.places.network.geo.data.GeocodingResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

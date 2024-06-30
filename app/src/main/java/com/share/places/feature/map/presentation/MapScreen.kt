@@ -26,7 +26,6 @@ fun MapScreen(
     viewModel: MapViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
-    var uiSettings by remember { mutableStateOf(MapUiSettings()) }
     var properties by remember {
         mutableStateOf(MapProperties(mapType = MapType.SATELLITE))
     }
@@ -43,13 +42,7 @@ fun MapScreen(
             GoogleMap(
                 modifier = Modifier.matchParentSize(),
                 properties = properties,
-                uiSettings = uiSettings
-            )
-            Switch(
-                checked = uiSettings.zoomControlsEnabled,
-                onCheckedChange = {
-                    uiSettings = uiSettings.copy(zoomControlsEnabled = it)
-                }
+                uiSettings = MapUiSettings().copy(zoomControlsEnabled = false)
             )
         }
     }

@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -23,6 +26,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val geoKey: String? = getLocalProperty("geo.key", project)
+        buildConfigField("String", "GEO_KEY", "\"${geoKey}\"")
     }
 
     buildTypes {
@@ -43,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.13"
@@ -77,6 +84,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Network module
+    implementation(project(":network"))
+
     // Firebase
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.database)
@@ -103,16 +113,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Retrofit
-    implementation(libs.retrofit)
-
-
     // Coil
     implementation(libs.coil.compose)
-
-    // Moshi
-    implementation(libs.moshi.kotlin)
-    implementation(libs.converter.moshi)
 
     // Lottie
     implementation(libs.lottie.compose)
@@ -139,4 +141,16 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+// Function to read properties from local.properties
+fun getLocalProperty(propertyName: String, project: Project): String? {
+    val localProperties = File(project.rootDir, "local.properties")
+    if (localProperties.exists()) {
+        val properties = Properties().apply {
+            load(FileInputStream(localProperties))
+        }
+        return properties.getProperty(propertyName)
+    }
+    return null
 }
