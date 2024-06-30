@@ -29,6 +29,7 @@ android {
 
         val geoKey: String? = getLocalProperty("geo.key", project)
         buildConfigField("String", "GEO_KEY", "\"${geoKey}\"")
+        manifestPlaceholders["GEO_KEY"] = geoKey.toString()
     }
 
     buildTypes {
