@@ -2,6 +2,7 @@ package com.share.places.feature.camera.presentation
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import androidx.camera.core.ImageCapture.OnImageCapturedCallback
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -12,6 +13,9 @@ import androidx.lifecycle.viewModelScope
 import com.share.places.feature.core.delegates.CameraDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,10 +24,12 @@ class CameraViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val cameraDelegate: CameraDelegate,
 ) : ViewModel() {
+    private val _photo = MutableStateFlow<Bitmap?>(null)
+    val photo = _photo.asStateFlow()
 
     fun takePhoto(
         controller: LifecycleCameraController,
-        onPhotoTaken: (Bitmap) -> Unit,
+        onPhotoTaken: () -> Unit,
         onPhotoError: (String?) -> Unit,
     ) {
         controller.takePicture(
@@ -31,9 +37,23 @@ class CameraViewModel @Inject constructor(
             object : OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
                     super.onCaptureSuccess(image)
-                    onPhotoTaken(image.toBitmap())
+
+                    val matrix = Matrix().apply {
+                        postRotate(image.imageInfo.rotationDegrees.toFloat())
+                    }
+                    val rotatedBitmap = Bitmap.createBitmap(
+                        image.toBitmap(),
+                        0,
+                        0,
+                        image.width,
+                        image.height,
+                        matrix,
+                        true
+                    )
+
                     viewModelScope.launch {
-                        cameraDelegate.emitData(image.toBitmap())
+                        onPhotoTaken()
+                        _photo.emit(rotatedBitmap)
                     }
                 }
 
@@ -43,5 +63,11 @@ class CameraViewModel @Inject constructor(
                 }
             }
         )
+    }
+
+    fun selectPhoto() = viewModelScope.launch {
+        photo.value?.let {
+            cameraDelegate.emitData(it)
+        }
     }
 }
