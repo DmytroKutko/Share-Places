@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.share.places.feature.places.presentation.PlacesListScreen
+import com.places.feature.places.presentation.PlacesListScreen
 import com.share.places.navigation.Screen
 import com.share.places.navigation.Tab
 

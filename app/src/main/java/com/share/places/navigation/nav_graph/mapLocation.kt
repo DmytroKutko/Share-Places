@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.google.android.gms.maps.model.LatLng
-import com.share.places.feature.selectLocation.presentation.ChooseLocationScreen
+import com.places.feature.selectLocation.ChooseLocationScreen
 import com.share.places.navigation.Screen
 
 fun NavGraphBuilder.mapLocation(navController: NavController) {

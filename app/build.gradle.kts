@@ -85,8 +85,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Network module
-    implementation(project(":network"))
+    // Feature module
+    implementation(project(":feature"))
 
     // Firebase
     implementation(libs.firebase.analytics)
@@ -96,12 +96,12 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     // Room Database
-    implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
-    ksp(libs.androidx.room.compiler)
+//    implementation(libs.androidx.room.runtime)
+//    annotationProcessor(libs.androidx.room.compiler)
+//    ksp(libs.androidx.room.compiler)
 
     // Room KTX
-    implementation(libs.androidx.room.ktx)
+//    implementation(libs.androidx.room.ktx)
 
     // Extended Icons
     implementation(libs.androidx.material.icons.extended)
@@ -110,34 +110,18 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    // Misc.
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    // Coil
-    implementation(libs.coil.compose)
-
     // Lottie
-    implementation(libs.lottie.compose)
+//    implementation(libs.lottie.compose)
 
     // Paging
-    implementation(libs.androidx.paging.runtime.ktx)
-    implementation(libs.androidx.paging.common.ktx)
+//    implementation(libs.androidx.paging.runtime.ktx)
+//    implementation(libs.androidx.paging.common.ktx)
 
     // Google maps
-    implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
 
     // Permissions
     implementation(libs.accompanist.permissions)
-
-    //CameraX
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.video)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.extensions)
 }
 
 kapt {
