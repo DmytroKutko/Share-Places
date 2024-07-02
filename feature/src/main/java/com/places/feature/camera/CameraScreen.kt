@@ -1,4 +1,4 @@
-package com.places.feature.camera.presentation
+package com.places.feature.camera
 
 import android.content.res.Configuration
 import androidx.camera.view.CameraController
@@ -28,7 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.places.feature.camera.presentation.components.PhotoDialogComponent
+import com.places.feature.camera.components.PhotoDialogComponent
 
 @Composable
 fun CameraScreen(

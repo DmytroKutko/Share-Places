@@ -1,4 +1,4 @@
-package com.places.feature.createPlace.presentation.components
+package com.places.feature.createPlace.components
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.background

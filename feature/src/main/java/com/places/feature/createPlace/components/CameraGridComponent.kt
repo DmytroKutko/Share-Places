@@ -1,4 +1,4 @@
-package com.places.feature.createPlace.presentation.components
+package com.places.feature.createPlace.components
 
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController

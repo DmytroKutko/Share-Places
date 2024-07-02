@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.share.places.feature.core.permissions.PermissionManager
+import com.places.mylibrary.AnalyticsService
 import com.share.places.core.ui.theme.SharePlacesTheme
+import com.share.places.feature.core.permissions.PermissionManager
 import com.share.places.navigation.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -15,15 +15,16 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var permissionManager: PermissionManager
+    lateinit var analyticsService: AnalyticsService
 
     @Inject
-    lateinit var analytics: FirebaseAnalytics
+    lateinit var permissionManager: PermissionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         checkPermissions()
+        analyticsService.trackOpenApp()
 
         setContent {
             SharePlacesTheme {

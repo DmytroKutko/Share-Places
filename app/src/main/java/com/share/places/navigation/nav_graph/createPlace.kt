@@ -3,7 +3,7 @@ package com.share.places.navigation.nav_graph
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.places.feature.createPlace.presentation.CreatePlaceScreen
+import com.places.feature.createPlace.CreatePlaceScreen
 import com.share.places.navigation.Screen
 
 fun NavGraphBuilder.createPlace(navController: NavController) {

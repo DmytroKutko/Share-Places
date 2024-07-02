@@ -1,4 +1,4 @@
-package com.places.feature.createPlace.presentation
+package com.places.feature.createPlace
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,7 +7,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.places.feature.createPlace.presentation.models.CreatePlaceState
+import com.places.feature.createPlace.models.CreatePlaceState
 import com.share.places.feature.core.delegates.AddressDelegate
 import com.share.places.feature.core.delegates.CameraDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel

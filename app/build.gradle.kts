@@ -88,6 +88,9 @@ dependencies {
     // Feature module
     implementation(project(":feature"))
 
+    // Analytics module
+    implementation(project(":analytics"))
+
     // Firebase
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.database)
@@ -109,13 +112,6 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-
-    // Lottie
-//    implementation(libs.lottie.compose)
-
-    // Paging
-//    implementation(libs.androidx.paging.runtime.ktx)
-//    implementation(libs.androidx.paging.common.ktx)
 
     // Google maps
     implementation(libs.play.services.maps)

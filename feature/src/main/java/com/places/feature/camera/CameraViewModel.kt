@@ -1,4 +1,4 @@
-package com.places.feature.camera.presentation
+package com.places.feature.camera
 
 import android.content.Context
 import android.graphics.Bitmap

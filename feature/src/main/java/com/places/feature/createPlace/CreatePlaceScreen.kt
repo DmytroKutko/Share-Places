@@ -1,4 +1,4 @@
-package com.places.feature.createPlace.presentation
+package com.places.feature.createPlace
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -54,7 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.android.gms.maps.model.LatLng
-import com.places.feature.createPlace.presentation.components.ImagePickerBottomSheetContent
+import com.places.feature.createPlace.components.ImagePickerBottomSheetContent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
