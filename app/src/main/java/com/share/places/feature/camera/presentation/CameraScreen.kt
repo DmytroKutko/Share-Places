@@ -100,7 +100,6 @@ fun CameraScreen(
                     showDialog = false
                 },
                 onCheck = {
-                    showDialog = false
                     viewModel.selectPhoto()
                     navController.navigateUp()
                 }
