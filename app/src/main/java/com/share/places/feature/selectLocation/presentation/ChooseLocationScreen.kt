@@ -42,7 +42,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
-import com.share.places.feature.selectLocation.data.PositionData
+import com.share.places.feature.selectLocation.presentation.models.LocationState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +54,7 @@ fun ChooseLocationScreen(
     modifier: Modifier = Modifier,
 ) {
 
-    val locationData: PositionData by viewModel.position.collectAsStateWithLifecycle()
+    val locationState: LocationState by viewModel.locationState.collectAsStateWithLifecycle()
     val markerPosition = coordinates
 
     val cameraPositionState = rememberCameraPositionState {
@@ -134,7 +134,7 @@ fun ChooseLocationScreen(
                     .widthIn(min = 80.dp, max = 300.dp),
                 containerColor = Color.White,
                 onClick = {
-                    viewModel.setAddress(locationData.address, locationData.coordinates)
+                    viewModel.setAddress(locationState.address, locationState.coordinates)
                     navController.navigateUp()
                 }
             ) {
@@ -143,7 +143,7 @@ fun ChooseLocationScreen(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .padding(horizontal = 16.dp),
-                    text = "Select: ${locationData.address}"
+                    text = "Select: ${locationState.address}"
                 )
             }
         }
@@ -185,7 +185,7 @@ fun ChooseLocationScreen(
         ) {
             Text(
                 text = """
-                    Street: ${locationData.address}
+                    Street: ${locationState.address}
                 """.trimIndent(),
                 modifier = Modifier
                     .padding(8.dp)

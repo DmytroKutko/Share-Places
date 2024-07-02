@@ -1,8 +1,8 @@
-package com.share.places.feature.selectLocation.data
+package com.share.places.feature.selectLocation.presentation.models
 
 import com.google.android.gms.maps.model.LatLng
 
-data class PositionData(
+data class LocationState(
     val address: String,
     val coordinates: LatLng
 )

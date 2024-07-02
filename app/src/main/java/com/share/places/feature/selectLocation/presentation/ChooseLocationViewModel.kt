@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.share.places.feature.core.delegates.AddressDelegate
-import com.share.places.feature.selectLocation.data.PositionData
+import com.share.places.feature.selectLocation.presentation.models.LocationState
 import com.share.places.feature.selectLocation.domain.ChooseLocationUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,20 +19,20 @@ class ChooseLocationViewModel @Inject constructor(
     private val useCases: ChooseLocationUseCases,
     private val addressDelegate: AddressDelegate
 ) : ViewModel() {
-    private val _position = MutableStateFlow(PositionData("", LatLng(0.0, 0.0)))
-    val position = _position.asStateFlow()
+    private val _locationState = MutableStateFlow(LocationState("", LatLng(0.0, 0.0)))
+    val locationState = _locationState.asStateFlow()
 
     fun updatePosition(latitude: Double, longitude: Double) = viewModelScope.launch {
         useCases.getAddress(LatLng(latitude, longitude))
             .catch {
-                _position.update {
+                _locationState.update {
                     it.copy(
                         address = "Error loading",
                     )
                 }
             }
             .collect { address ->
-                _position.update {
+                _locationState.update {
                     it.copy(
                         address = address,
                         coordinates = LatLng(latitude, longitude)
@@ -42,11 +42,11 @@ class ChooseLocationViewModel @Inject constructor(
     }
 
     fun setAddress(address: String, coordinates: LatLng) = viewModelScope.launch {
-        addressDelegate.emitData(PositionData(address, coordinates))
+        addressDelegate.emitData(LocationState(address, coordinates))
     }
 
     fun cameraIsMoving() = viewModelScope.launch {
-        _position.update {
+        _locationState.update {
             it.copy(
                 address = "Loading..."
             )
