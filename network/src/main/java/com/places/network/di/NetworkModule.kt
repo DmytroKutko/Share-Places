@@ -34,7 +34,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGeoRepository(api: GeocodingApi): GeoRepository = GeoRepositoryImpl(
-            api = api
-    )
+    fun provideGeoRepository(api: GeocodingApi): GeoRepository = GeoRepositoryImpl(api = api)
 }
