@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -35,6 +33,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -69,13 +69,13 @@ fun CreatePlaceScreen(
     viewModel: CreatePlaceViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
-    val locationData by viewModel.locationData.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    val placeData by viewModel.placeData.collectAsStateWithLifecycle()
+    val bitmaps by viewModel.bitmaps.collectAsStateWithLifecycle()
 
     val scaffoldState = rememberBottomSheetScaffoldState()
     val scope = rememberCoroutineScope()
-
-    var title by remember { mutableStateOf(TextFieldValue()) }
-    var description by remember { mutableStateOf(TextFieldValue()) }
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -84,6 +84,10 @@ fun CreatePlaceScreen(
         scope.launch {
             scaffoldState.bottomSheetState.partialExpand()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getAllImagesFromGallery(context)
     }
 
     BottomSheetScaffold(
@@ -116,6 +120,7 @@ fun CreatePlaceScreen(
         sheetContent = {
             ImagePickerBottomSheetContent(
                 isExpanded = scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded,
+                bitmaps = bitmaps,
                 cameraClickListener = {
                     cameraClickListener()
                     scope.launch {
@@ -124,6 +129,9 @@ fun CreatePlaceScreen(
                 },
                 imageClickListener = { bitmap ->
                     viewModel.setImageFromGallery(bitmap)
+                    scope.launch {
+                        scaffoldState.bottomSheetState.partialExpand()
+                    }
                 }
             )
         },
@@ -151,9 +159,9 @@ fun CreatePlaceScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Spacer(modifier = Modifier.size(24.dp))
-            if (locationData.selectedImage != null) {
+            if (placeData.selectedImage != null) {
                 AsyncImage(
-                    model = locationData.selectedImage,
+                    model = placeData.selectedImage,
                     contentDescription = null,
                     modifier = Modifier
                         .widthIn(96.dp, 200.dp)
@@ -188,7 +196,7 @@ fun CreatePlaceScreen(
                     .padding(vertical = 12.dp)
                     .clickable {
                         locationClickListener(
-                            viewModel.locationData.value.coordinates
+                            viewModel.placeData.value.coordinates
                         )
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -197,16 +205,16 @@ fun CreatePlaceScreen(
                 Icon(imageVector = Icons.Default.AddLocation, contentDescription = null)
 
                 Text(
-                    text = locationData.locationAddress,
+                    text = placeData.locationAddress,
                     fontSize = 24.sp
                 )
             }
 
             OutlinedTextField(
                 maxLines = 1,
-                value = title,
+                value = placeData.title ?: "",
                 onValueChange = {
-                    title = it
+                    viewModel.setTitle(it)
                 },
                 label = { Text("Title") },
                 modifier = Modifier
@@ -221,9 +229,9 @@ fun CreatePlaceScreen(
             )
 
             OutlinedTextField(
-                value = description,
+                value = placeData.description ?: "",
                 onValueChange = {
-                    description = it
+                    viewModel.setDescription(it)
                 },
                 label = { Text("Description") },
                 modifier = Modifier

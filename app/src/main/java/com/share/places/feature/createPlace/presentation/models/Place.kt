@@ -1,4 +1,4 @@
-package com.share.places.feature.createPlace.data
+package com.share.places.feature.createPlace.presentation.models
 
 data class Place(
     val title: String,
