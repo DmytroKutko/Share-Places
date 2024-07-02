@@ -13,7 +13,6 @@ import javax.inject.Inject
 class GetAddress @Inject constructor(
     private val repository: GeoRepository
 ) {
-    private var latestAddress = ""
     suspend operator fun invoke(coordinated: LatLng) = flow {
         try {
             val response = repository.getAddress("${coordinated.latitude},${coordinated.longitude}", BuildConfig.GEO_KEY)
@@ -25,10 +24,7 @@ class GetAddress @Inject constructor(
                 val number =
                     result.addressComponents.find { it.types.contains("street_number") }?.longName
                         ?: "Unknown number"
-                latestAddress = "$street $number"
                 emit("$street $number")
-            } else {
-                emit(latestAddress)
             }
         } catch (e: Exception) {
             emit("Error: ${e.message}")
