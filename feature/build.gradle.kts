@@ -63,6 +63,7 @@ dependencies {
     // Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui.tooling.preview)
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
     // Firebase
@@ -90,6 +91,7 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
+    debugImplementation(libs.ui.tooling)
     kapt(libs.hilt.android.compiler)
 
     // Misc.
@@ -103,6 +105,9 @@ dependencies {
     implementation(libs.androidx.camera.video)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
+
+    // Shimmer
+    implementation(libs.shimmer)
 }
 
 kapt {

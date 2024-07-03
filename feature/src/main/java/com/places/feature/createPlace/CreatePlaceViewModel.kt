@@ -139,7 +139,7 @@ class CreatePlaceViewModel @Inject constructor(
                 description = place.description!!,
                 address = place.locationAddress,
                 country = "",
-                image = place.image?.bitmapToBase64() ?: "",
+                image = place.image!!,
                 latitude = place.coordinates!!.latitude,
                 longitude = place.coordinates.longitude
             ))
