@@ -1,5 +1,6 @@
 package com.places.network.di
 
+import com.google.firebase.database.FirebaseDatabase
 import com.places.network.geo.GeoRepository
 import com.places.network.geo.GeoRepositoryImpl
 import com.places.network.geo.GeocodingApi
@@ -17,6 +18,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Singleton
+    @Provides
+    fun provideFirebaseDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance()
 
     @Singleton
     @Provides

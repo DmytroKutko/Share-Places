@@ -59,6 +59,9 @@ dependencies {
     // Moshi
     implementation(libs.moshi.kotlin)
     implementation(libs.converter.moshi)
+
+    // Firebase
+    implementation(libs.firebase.database)
 }
 
 kapt {
