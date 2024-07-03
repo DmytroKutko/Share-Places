@@ -1,15 +1,20 @@
 package com.places.feature.createPlace
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
+import com.places.domain.delegates.AddressDelegate
+import com.places.domain.delegates.CameraDelegate
 import com.places.feature.createPlace.models.CreatePlaceState
-import com.share.places.feature.core.delegates.AddressDelegate
-import com.share.places.feature.core.delegates.CameraDelegate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,8 +29,7 @@ class CreatePlaceViewModel @Inject constructor(
     private val cameraDelegate: CameraDelegate,
 ) : ViewModel() {
 
-    private val _placeData =
-        MutableStateFlow(CreatePlaceState(null,null,null, emptyList(), "Select Location", null))
+    private val _placeData = MutableStateFlow(CreatePlaceState(null, null, null, emptyList(), "Select Location", null))
     val placeData = _placeData.asStateFlow()
 
     private val _bitmaps = MutableStateFlow<List<Bitmap>>(emptyList())
@@ -37,7 +41,7 @@ class CreatePlaceViewModel @Inject constructor(
                 _placeData.update {
                     it.copy(
                         locationAddress = data.address,
-                        coordinates = data.coordinates
+                        coordinates = LatLng(data.latitude, data.longitude)
                     )
                 }
             }
@@ -47,7 +51,7 @@ class CreatePlaceViewModel @Inject constructor(
             cameraDelegate.dataFlow.collect { image ->
                 _placeData.update {
                     it.copy(
-                        selectedImage = image
+                        image = image
                     )
                 }
             }
@@ -57,7 +61,7 @@ class CreatePlaceViewModel @Inject constructor(
     fun setImageFromGallery(bitmap: Bitmap) {
         _placeData.update {
             it.copy(
-                selectedImage = bitmap
+                image = bitmap
             )
         }
     }
@@ -103,11 +107,24 @@ class CreatePlaceViewModel @Inject constructor(
             )
         }
     }
+
     fun setDescription(description: String) = viewModelScope.launch {
         _placeData.update {
             it.copy(
                 description = description
             )
+        }
+    }
+
+    fun requestCameraPermission(context: Context, cameraLauncher: ManagedActivityResultLauncher<String, Boolean>, onSuccess: () -> Unit) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            cameraLauncher.launch(Manifest.permission.CAMERA)
+        } else {
+            onSuccess()
         }
     }
 }

@@ -1,6 +1,11 @@
 package com.places.feature.createPlace
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -35,8 +40,10 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +56,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -77,13 +85,55 @@ fun CreatePlaceScreen(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    var cameraPermissionGranted by remember { mutableStateOf(false) }
+    var mediaPermissionGranted by remember { mutableStateOf(false) }
+
     BackHandler(enabled = scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded) {
         scope.launch {
             scaffoldState.bottomSheetState.partialExpand()
         }
     }
 
+// Permission launcher for CAMERA
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean ->
+            cameraPermissionGranted = isGranted
+        }
+    )
+
+// Permission launcher for READ_MEDIA_IMAGES
+    val mediaLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean ->
+            mediaPermissionGranted = isGranted
+        }
+    )
+
+// Check for READ_MEDIA_IMAGES permission and request if not granted
     LaunchedEffect(Unit) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Manifest.permission.READ_MEDIA_IMAGES
+                } else {
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                }
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            mediaLauncher.launch(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Manifest.permission.READ_MEDIA_IMAGES
+                } else {
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                }
+            )
+        } else {
+            mediaPermissionGranted = true
+        }
+    }
+
+    LaunchedEffect(mediaPermissionGranted) {
         viewModel.getAllImagesFromGallery(context)
     }
 
@@ -156,18 +206,24 @@ fun CreatePlaceScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Spacer(modifier = Modifier.size(24.dp))
-            if (placeData.selectedImage != null) {
+            if (placeData.image != null) {
                 AsyncImage(
-                    model = placeData.selectedImage,
+                    model = placeData.image,
                     contentDescription = null,
                     modifier = Modifier
                         .widthIn(96.dp, 200.dp)
                         .heightIn(96.dp, 200.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .clickable {
+                            if (!cameraPermissionGranted) {
+                                viewModel.requestCameraPermission(context, cameraLauncher) {
+                                    cameraPermissionGranted = true
+                                }
+                            }
                             scope.launch {
                                 scaffoldState.bottomSheetState.expand()
                             }
+
                         },
                     contentScale = ContentScale.FillHeight
                 )
@@ -180,9 +236,15 @@ fun CreatePlaceScreen(
                         .heightIn(96.dp, 200.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .clickable {
+                            if (!cameraPermissionGranted) {
+                                viewModel.requestCameraPermission(context, cameraLauncher) {
+                                    cameraPermissionGranted = true
+                                }
+                            }
                             scope.launch {
                                 scaffoldState.bottomSheetState.expand()
                             }
+
                         }
                 )
             }

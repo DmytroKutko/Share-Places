@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng
 data class CreatePlaceState(
     val title: String?,
     val description: String?,
-    val selectedImage: Bitmap?,
+    val image: Bitmap?,
     val galleryList: List<Uri>,
     val locationAddress: String,
     val coordinates: LatLng?,

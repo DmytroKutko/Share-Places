@@ -10,9 +10,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
+import com.places.domain.delegates.AddressDelegate
+import com.places.domain.models.LocationData
 import com.places.domain.selectLocation.ChooseLocationUseCases
-import com.share.places.feature.core.delegates.AddressDelegate
-import com.share.places.feature.core.permissions.PermissionManager
 import com.places.feature.selectLocation.models.LocationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChooseLocationViewModel @Inject constructor(
     private val useCases: ChooseLocationUseCases,
-    private val addressDelegate: AddressDelegate,
-    private val permissionManager: PermissionManager
+    private val addressDelegate: AddressDelegate
 ) : ViewModel() {
     private val _locationState = MutableStateFlow(LocationState("", LatLng(0.0, 0.0)))
     val locationState = _locationState.asStateFlow()
@@ -51,7 +50,14 @@ class ChooseLocationViewModel @Inject constructor(
     }
 
     fun setAddress(address: String, coordinates: LatLng) = viewModelScope.launch {
-        addressDelegate.emitData(LocationState(address, coordinates))
+        addressDelegate.emitData(
+            LocationData(
+                address,
+                "",
+                coordinates.latitude,
+                coordinates.longitude
+            )
+        )
     }
 
     fun cameraIsMoving() = viewModelScope.launch {
@@ -61,6 +67,7 @@ class ChooseLocationViewModel @Inject constructor(
             )
         }
     }
+
 
     @SuppressLint("MissingPermission")
     fun getUserLocation(context: Context, onLocationFound: (CameraUpdate) -> Unit) {

@@ -1,4 +1,4 @@
-package com.share.places.feature.core.delegates
+package com.places.domain.delegates
 
 import android.graphics.Bitmap
 import kotlinx.coroutines.flow.MutableSharedFlow
