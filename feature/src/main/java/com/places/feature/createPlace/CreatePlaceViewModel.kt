@@ -14,6 +14,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.places.domain.delegates.AddressDelegate
 import com.places.domain.delegates.CameraDelegate
+import com.places.domain.delegates.place.PlaceUseCases
+import com.places.domain.delegates.place.model.Place
+import com.places.domain.utils.bitmapToBase64
 import com.places.feature.createPlace.models.CreatePlaceState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +30,7 @@ import javax.inject.Inject
 class CreatePlaceViewModel @Inject constructor(
     private val addressDelegate: AddressDelegate,
     private val cameraDelegate: CameraDelegate,
+    private val placeUseCases: PlaceUseCases,
 ) : ViewModel() {
 
     private val _placeData = MutableStateFlow(CreatePlaceState(null, null, null, emptyList(), "Select Location", null))
@@ -125,6 +129,20 @@ class CreatePlaceViewModel @Inject constructor(
             cameraLauncher.launch(Manifest.permission.CAMERA)
         } else {
             onSuccess()
+        }
+    }
+
+    fun insertPlace() = viewModelScope.launch {
+        placeData.value.also { place ->
+            placeUseCases.insertPlace(Place(
+                title = place.title!!,
+                description = place.description!!,
+                address = place.locationAddress,
+                country = "",
+                image = place.image?.bitmapToBase64() ?: "",
+                latitude = place.coordinates!!.latitude,
+                longitude = place.coordinates.longitude
+            ))
         }
     }
 }

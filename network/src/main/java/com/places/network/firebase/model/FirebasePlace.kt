@@ -8,4 +8,7 @@ data class FirebasePlace(
     val image: String,
     val latitude: Double,
     val longitude: Double
-)
+) {
+    // Default constructor is required for firebase models
+    constructor() : this("", "", "", "", "", 0.0, 0.0)
+}

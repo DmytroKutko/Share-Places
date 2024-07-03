@@ -1,5 +1,6 @@
 package com.places.network.firebase
 
+import android.util.Log
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.places.network.firebase.model.FirebasePlace
@@ -41,6 +42,7 @@ internal class PlaceRepositoryImpl @Inject constructor(
                 places
             } catch (e: Exception) {
                 // Handle error appropriately (logging, rethrowing, etc.)
+                Log.d("PlaceRepositoryImpl_debug", "getAllPlaces: ${e.localizedMessage}")
                 emptyList()
             }
         }

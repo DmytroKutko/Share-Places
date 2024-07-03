@@ -311,7 +311,10 @@ fun CreatePlaceScreen(
             Button(
                 modifier = Modifier
                     .width(96.dp),
-                onClick = { /*TODO*/ }) {
+                onClick = {
+                    viewModel.insertPlace()
+                    navController.navigateUp()
+                }) {
                 Text(text = "Save")
             }
         }

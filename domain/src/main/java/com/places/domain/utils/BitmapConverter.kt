@@ -1,4 +1,4 @@
-package com.share.places.utils
+package com.places.domain.utils
 
 import android.graphics.Bitmap
 import android.util.Base64

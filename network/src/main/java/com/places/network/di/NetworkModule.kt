@@ -1,6 +1,8 @@
 package com.places.network.di
 
 import com.google.firebase.database.FirebaseDatabase
+import com.places.network.firebase.PlaceRepository
+import com.places.network.firebase.PlaceRepositoryImpl
 import com.places.network.geo.GeoRepository
 import com.places.network.geo.GeoRepositoryImpl
 import com.places.network.geo.GeocodingApi
@@ -40,4 +42,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideGeoRepository(api: GeocodingApi): GeoRepository = GeoRepositoryImpl(api = api)
+
+    @Provides
+    @Singleton
+    fun providePlaceRepository(database: FirebaseDatabase): PlaceRepository = PlaceRepositoryImpl(
+        database = database
+    )
 }
