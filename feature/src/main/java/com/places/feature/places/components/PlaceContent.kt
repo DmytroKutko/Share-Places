@@ -31,7 +31,7 @@ fun PlaceContent(
     ) {
         Image(
             modifier = Modifier
-                .height(200.dp)
+                .height(240.dp)
                 .clip(RoundedCornerShape(8.dp)),
             bitmap = bitmap.asImageBitmap(),
             contentDescription = null,

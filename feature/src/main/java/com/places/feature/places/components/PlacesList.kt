@@ -17,9 +17,11 @@ fun PlacesList(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
             .fillMaxSize()
     ) {
+        item { Spacer(modifier = Modifier.padding(8.dp)) }
+
         items(places) { place ->
             PlaceComponent(
                 place = place,
@@ -28,5 +30,7 @@ fun PlacesList(
                 }
             )
         }
+
+        item { Spacer(modifier = Modifier.padding(8.dp)) }
     }
 }

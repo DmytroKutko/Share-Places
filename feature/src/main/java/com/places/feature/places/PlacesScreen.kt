@@ -41,7 +41,7 @@ fun PlacesListScreen(
     ) { paddingValues ->
         Box(
             modifier = modifier
-                .padding(paddingValues)
+                .padding(top = paddingValues.calculateTopPadding())
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {

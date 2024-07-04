@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +21,9 @@ import com.places.domain.delegates.place.model.Place
 fun PlaceComponent(
     place: Place,
     onPostClicked:(place: Place) -> Unit,
-    title: @Composable ColumnScope.() -> Unit = {},
+    title: @Composable ColumnScope.() -> Unit = {
+        TitleContent(avatar = null, userName = "User User", address = place.address)
+    },
     content: @Composable ColumnScope.() -> Unit = {
         PlaceContent(bitmap = place.image, title = place.title, description = place.description)
     },
