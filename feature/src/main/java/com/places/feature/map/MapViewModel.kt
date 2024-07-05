@@ -1,4 +1,4 @@
-package com.places.feature.map.presentation
+package com.places.feature.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
