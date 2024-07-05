@@ -17,10 +17,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 import com.places.domain.delegates.place.model.Place
 import com.places.feature.map.components.MapBottomSheet
@@ -39,6 +41,11 @@ fun MapScreen(
     val isSheetOpen = rememberSaveable { mutableStateOf(false) }
     val selectedPlace = remember { mutableStateOf<Place?>(null) }
     val scope = rememberCoroutineScope()
+    val markerPosition = LatLng(37.7749, -122.4194)
+
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(markerPosition, 10f)
+    }
 
     Scaffold(
         topBar = {
@@ -54,7 +61,8 @@ fun MapScreen(
         ) {
             GoogleMap(
                 modifier = Modifier.matchParentSize(),
-                uiSettings = MapUiSettings().copy(zoomControlsEnabled = false)
+                uiSettings = MapUiSettings().copy(zoomControlsEnabled = false),
+                cameraPositionState = cameraPositionState,
             ) {
                 places.forEach { place ->
                     Marker(
